@@ -1,20 +1,27 @@
-import React from 'react';
-
-import { StyleSheet, Text, View, Image, Button, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Button } from '@rneui/themed';
+import { StyleSheet,  View, Image,  Alert } from 'react-native';
 import { H1 } from '../styles/typography';
-
-export const BaseProduct = ({ id, name, description, price, image }) => {
+import { Text, useTheme } from '@rneui/themed';
+export const BaseProduct = ({ id, name, description, price, image, handleAddTocart }) => {
   const onAddToCart = () => {
-    Alert.alert(`${name} placerades i varukorgen`);
-  };
+    setLoading(true);
 
+    setTimeout(() => {
+      handleAddTocart(id);
+      Alert.alert(`${name} placerades i varukorgen`);
+      setLoading(false);
+    }, 2000);
+
+  };
+const [loading, setLoading] = useState(false);
   return (
     <View key={id} style={styles.container}>
-      <H1>{name}</H1>
+      <Text h3>{name}</Text>
       <Image source={image} style={styles.image}></Image>
-      <Text>{description}</Text>
+      <Text p>{description}</Text>
       <Text>{price} kr</Text>
-      <Button title="köp:)" onPress={() => onAddToCart()}></Button>
+      <Button title="Lägg i kundkorgen" onPress={() => onAddToCart()} style={styles.button} loading={loading}></Button>
     </View>
   );
 };
@@ -32,4 +39,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 24,
   },
+  button: {
+    marginTop: 16
+  }
 });
